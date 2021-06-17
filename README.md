@@ -26,6 +26,38 @@ cannot be public, you can, however, send us a private
 be created; use [sbt-assembly](https://github.com/sbt/sbt-assembly) to ensure
 the necessary dependencies are included as part of this archive.
 
+## Docker
+
+### Running the image
+The image comes pre-loaded with the [REDD](http://redd.csail.mit.edu) dataset.
+To run ModelarDB with this data ingested run
+```shell
+docker run -d \
+  -it \
+  --name modelardb \
+  modelardb:1.0.0 conf/redd-data.conf
+```
+
+### Loading your own data and config
+To load your own data and config file you need to use Docker `bind-mount`.  
+An example of this is given below
+```shell
+docker run -d \
+  -it \
+  --name modelardb \
+  --mount type=bind,source="$(pwd)"/<your-data-dir>,target=/data/<your-data-dir>,readonly \
+  --mount type=bind,source="$(pwd)"/<your-config.conf>,target=<your-config.conf>,readonly \
+  modelardb:latest <your-config.conf>
+```
+where the config should contain the path to your data such as
+```hocon
+modelar-db {
+  # Supported: filepath (glob), ip:port
+  source = "/data/<your-data-dir>/*.csv"
+}
+```
+
+
 ## Papers
 The work leading to ModelarDB is documented in a number of papers. If you use
 ModelarDB in academia, please cite the relevant paper(s) below.
@@ -57,7 +89,7 @@ Download: [arXiv](https://arxiv.org/abs/1903.10269)
 
 ## Configuration
 ModelarDB requires that a configuration file is available at
-*$HOME/Programs/modelardb.conf* or as the first command-line argument. This file
+*$HOME/modelardb.conf* or as the first command-line argument. This file
 must specify the query processing engine and storage system to use. An example
 configuration is included as part of this repository.
 
