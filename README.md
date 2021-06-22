@@ -32,29 +32,35 @@ the necessary dependencies are included as part of this archive.
 The image comes pre-loaded with the [REDD](http://redd.csail.mit.edu) dataset.
 To run ModelarDB with this data ingested run
 ```shell
-docker run -d \
-  -it \
+docker run -it \
+  -p 9999:9999 \
   --name modelardb \
-  modelardb:1.0.0 conf/redd-data.conf
+  ghcr.io/modelardata/modelardb:latest
 ```
+
+Now try to query it with a simple select like
+```shell
+curl -d "select * from segment limit 3" -X POST localhost:9999
+```
+
+Please note that it might take several seconds (sometimes more than 30) to execute the first query.
+Subsequent queries will be faster.
 
 ### Loading your own data and config
 To load your own data and config file you need to use Docker `bind-mount`.  
 An example of this is given below
 ```shell
-docker run -d \
-  -it \
+docker run -it \
+  -p 9999:9999 \
   --name modelardb \
-  --mount type=bind,source="$(pwd)"/<your-data-dir>,target=/data/<your-data-dir>,readonly \
-  --mount type=bind,source="$(pwd)"/<your-config.conf>,target=<your-config.conf>,readonly \
-  modelardb:latest <your-config.conf>
+  --mount type=bind,source=/path/to/your/data,target=/data/,readonly \
+  --mount type=bind,source=/path/to/your/config.conf,target=/conf/<your-config.conf>,readonly \
+  ghcr.io/modelardata/modelardb:latest /conf/<your-config.conf>
 ```
-where the config should contain the path to your data such as
-```hocon
-modelar-db {
+where the config file you provide should contain the path to your data such as
+```txt
   # Supported: filepath (glob), ip:port
   source = "/data/<your-data-dir>/*.csv"
-}
 ```
 
 
