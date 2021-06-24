@@ -28,10 +28,13 @@ fi
 
 DOCKER_TAG=${1:-latest}
 GIT_SHA=$(git rev-parse --short HEAD)
+GIT_BRANCH=$(git branch --show-current)
+GIT_BRANCH=${GIT_BRANCH//\//-} # replace / with -
 
 
 docker build \
 -t "ghcr.io/modelardata/modelardb:$DOCKER_TAG" \
 -t "ghcr.io/modelardata/modelardb:$GIT_SHA" \
+-t "ghcr.io/modelardata/modelardb:$GIT_BRANCH" \
 -f redd.Dockerfile .
 
