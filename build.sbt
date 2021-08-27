@@ -1,8 +1,7 @@
 import com.typesafe.sbt.packager.MappingsHelper.directory
 
 name := "ModelarDB"
-version := "1.0"
-scalaVersion := "2.12.13"
+scalaVersion := "2.12.14"
 scalacOptions ++= Seq("-opt:l:inline", "-opt-inline-from:<sources>", "-feature", "-deprecation", "-Xlint:_")
 
 val AkkaVersion = "2.6.13"
@@ -14,9 +13,9 @@ libraryDependencies ++= Seq(
 
   /* Query Engine */
   "com.h2database" % "h2" % "1.4.200",
-  "org.apache.spark" %% "spark-core" % "3.1.1" % "provided",
-  "org.apache.spark" %% "spark-streaming" % "3.1.1" % "provided",
-  "org.apache.spark" %% "spark-sql" % "3.1.1" % "provided",
+  "org.apache.spark" %% "spark-core" % "3.1.2" % "provided",
+  "org.apache.spark" %% "spark-streaming" % "3.1.2" % "provided",
+  "org.apache.spark" %% "spark-sql" % "3.1.2" % "provided",
 
   /* Storage Layer */
   //H2 is a full RDBMS with both a query engine and a storage layer
@@ -103,8 +102,8 @@ assembly / assemblyMergeStrategy := {
 jacocoReportSettings := JacocoReportSettings(formats = Seq(JacocoReportFormats.ScalaHTML))
 
 /* Github Package Repository */
-val owner = "modelardata"
-val repo = "modelardb"
+val owner = "ModelarData"
+val repo = "ModelarDB"
 publishMavenStyle := true
 publishTo := Some("GitHub Package Registry" at s"https://maven.pkg.github.com/$owner/$repo")
 
