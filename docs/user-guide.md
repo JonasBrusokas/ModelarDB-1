@@ -176,15 +176,15 @@ ModelarDB stores data in 3 different tables and offers 2 view for querying the d
 
 4. **Segment view**
 
-    For quering the compressed data
+    For querying the compressed models
     
 6. **Data Point view**
 
-   Reconstruct the underlying datapoints using the model
+   For querying the datapoints (by reconstructing them from the models)
 
 
 
-All data examples presented below are taken from the ingested [REDD](http://redd.csail.mit.edu/) dataset.
+Below we present the DDL of the above mentioned tables/views so you can se precisely how the database schema is defined (please don't run the DDLs against ModelarDB as the tables are already in place). Additionally we also present examples of what the data in the tables look like (all data examples are taken from the ingested [REDD](http://redd.csail.mit.edu/) dataset).
 
 
 
@@ -283,7 +283,7 @@ create index SEGMENT_END_TIME
 
 ### Segment View
 
-The segment view is basically the same as the segment table with the one difference that it contains the `tid` (timeseries id) allowing you to query on this instead of the `gid` (group id).
+The segment view is basically the same as the segment table with the one difference that it contains the `tid` (timeseries id) allowing you to query on this instead of the `gid` (group id). Further it comes with built-in user defined aggregate functions (UDAFs) allowing you to query the compressed models quickly and efficiently (see section on [querying](#query results) below for details).
 
 **DDL**
 
@@ -298,6 +298,10 @@ create table SEGMENT
     gaps BINARY
 );
 ```
+
+(Note: if you have specified any `dimensions` in the config file they will be added as columns to this view. For more details on `dimensions` see the [troubleshooting](#troubleshooting) section at the end of the document)
+
+
 
 **Example Data**
 
@@ -314,7 +318,7 @@ create table SEGMENT
 
 ### Data Point View
 
-ModelarDB has a datapoint view which you can use if you want to get back the compressed datapoints. Please note that this reconstructs the datapoints using the model (and its parameters) stored in the `model_type` table and hence if the model is lossy then the returned datapoint might deviate from the actual ingested datapoint up to the percentage specified in the config setting `modelardb.error_bound`. Further please note that quering this view is slow as it has to recalculate all the values.
+ModelarDB has a datapoint view which you can use if you want to get back the decompressed data points. Please note that this reconstructs the datapoints using the model (and its parameters) stored in the `segment` table and hence if the model is lossy then the returned data point might deviate from the actual ingested data point up to the percentage specified in the config setting `modelardb.error_bound`. Further please note that quering this view is slower than using the `segment` view as it has to reconstruct the data points requested.
 
 **DDL**
 
@@ -366,8 +370,8 @@ The other options work as follows.
 With the file option you put your SQL queries in a file. One query on each line.
 
 ```sql
-select count(*) from segment
-select * from segment limit 5
+SELECT count(*) FROM segment
+SELECT * FROM segment LIMIT 5
 ```
 
 And then point ModelarDB to the file
@@ -394,7 +398,7 @@ You can query it by
 
 ```sh
 curl -X POST "http://localhost:9999" \
-     -d "select * from segment limit 5"
+     -d "SELECT * FROM segment LIMIT 5"
 ```
 
 ModelarDB listens on port `9999` (at the moment it is not possible to change this port)
@@ -434,7 +438,7 @@ Here is the result of a simple `select` query directly on the `segment` table
 ```json
 {
   "time": "PT0.003S",
-  "query": "select * from segment limit 5",
+  "query": "SELECT * FROM segment LIMIT 5",
   "result": [
     {
       "TID": 1,
@@ -487,7 +491,7 @@ Here is an example of doing a `count` on the `segment` table
 ```json
 {
   "time": "PT0.804S",
-  "query": "select count(*) from segment",
+  "query": "SELECT count(*) FROM segment",
   "result":  [
     {"COUNT(*)":"380744"}
   ]
@@ -496,7 +500,7 @@ Here is an example of doing a `count` on the `segment` table
 
 
 
-We do not reccomend querying the `segment` view using just a standard SQL `select` though. As this only returns the serialized data. Instead use one of the built-in special operators which are able to operate directly on the compressed data.
+There isn't much value in querying the `segment` view using just a simple SQL `select *` though. As this only returns the compressed models (and these mostly makes sense to ModelarDB). Instead use one of the built-in UDAFs which are able to operate directly on the compressed models.
 
 * `count_s`
 * `min_s`
@@ -512,7 +516,7 @@ Examples of using these aggregate query operators are given below.
 ```json
 {
   "time": "PT0.965S",
-  "query": "select COUNT_S(#) from segment",
+  "query": "SELECT COUNT_S(#) FROM segment",
   "result":  [
     {"COUNT_S(TID, START_TIME, END_TIME)":"24677756"}
   ]
@@ -524,7 +528,7 @@ Examples of using these aggregate query operators are given below.
 ```json
 {
   "time": "PT0.046S",
-  "query": "select MIN_S(#) from segment where tid = 1",
+  "query": "SELECT MIN_S(#) FROM segment WHERE tid = 1",
   "result":  [
     {"MIN_S(TID, START_TIME, END_TIME, MTID, MODEL, GAPS)":49.80843}
   ]
@@ -536,7 +540,7 @@ Examples of using these aggregate query operators are given below.
 ```json
 {
   "time": "PT0.039S",
-  "query": "select MAX_S(#) from segment where tid = 1",
+  "query": "SELECT MAX_S(#) FROM segment WHERE tid = 1",
   "result":  [
     {"MAX_S(TID, START_TIME, END_TIME, MTID, MODEL, GAPS)":6081.36}
   ]
@@ -548,7 +552,7 @@ Examples of using these aggregate query operators are given below.
 ```json
 {
   "time": "PT0.051S",
-  "query": "select SUM_S(#) from segment where tid = 1",
+  "query": "SELECT SUM_S(#) FROM segment WHERE tid = 1",
   "result":  [
     {"SUM_S(TID, START_TIME, END_TIME, MTID, MODEL, GAPS)":3.54920928E8}
   ]
@@ -560,7 +564,7 @@ Examples of using these aggregate query operators are given below.
 ```json
 {
   "time": "PT0.164S",
-  "query": "select AVG_S(#) from segment where tid = 1",
+  "query": "SELECT AVG_S(#) FROM segment WHERE tid = 1",
   "result":  [
     {"AVG_S(TID, START_TIME, END_TIME, MTID, MODEL, GAPS)":227.27156}
   ]
@@ -576,7 +580,7 @@ As mentioned in the [data point view](#data-point-view-1) section above you can 
 ```json
 {
   "time": "PT0.009S",
-  "query": "select * from datapoint where tid = 2 and timestamp < '2011-04-18 16:45:18' limit 3",
+  "query": "SELECT * FROM datapoint WHERE tid = 2 AND timestamp < '2011-04-18 16:45:18' limit 3",
   "result":  [
     {"TID":2,"TIMESTAMP":"2011-04-18 13:22:09.0","VALUE":119.43839},
     {"TID":2,"TIMESTAMP":"2011-04-18 13:22:10.0","VALUE":119.43839},
@@ -594,7 +598,7 @@ You can run aggregate queries directly on the `datapoint` view but be aware that
 ```json
 {
   "time": "PT0.79S",
-  "query": "select avg(value) from datapoint where tid = 2 and timestamp < '2011-04-18 16:45:18'",
+  "query": "SELECT avg(value) FROM datapoint WHERE tid = 2 AND timestamp < '2011-04-18 16:45:18'",
   "result":  [
     {"AVG(VALUE)":49.169487}
   ]
@@ -643,9 +647,9 @@ defines a dimension named `Location` which has a hieracy of country > region > c
 With this dimensionn defined you can the specify correlations between the different dimensions in the following way
 
 ```
-# Timeseries are correlated if level 1 of the Location dimension (country) is France
+# Data points are correlated if level 1 of the Location dimension (country) is France
 modelardb.correlation Location 1 France 
-# Timeseries are correlated if level 2 of the Location dimension (region) is Bordeaux
+# Data points are correlated if level 2 of the Location dimension (region) is Bordeaux
 modelardb.correlation Location 2 Bordeaux 
 ```
 
@@ -657,7 +661,7 @@ You can also specify correlations independent of dimensions such as
 modelardb.correlation auto
 ```
 
-which tells ModelarDB to calculate the lowest non-zero distance possible in the dataset and use this value to group timeseries.
+which tells ModelarDB to calculate the lowest non-zero distance possible in the dataset and use this value to group data points.
 
 Alternatively you can specify the distance threshold manually as
 
@@ -675,3 +679,4 @@ For the specific details of how dimensions and correlation works see section IV 
 
 Links: [IEEE](https://ieeexplore.ieee.org/document/9458830), [arXiv](https://arxiv.org/abs/1903.10269)
 
+The reason for specifying dimensions and correlations is that with this extra information ModelarDB can compress the data even more.
