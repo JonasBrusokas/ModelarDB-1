@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+// ModelType is for compressing the data
 public abstract class ModelType implements Serializable {
 
     /** Constructors **/
@@ -31,13 +32,40 @@ public abstract class ModelType implements Serializable {
     }
 
     /** Public Methods **/
-    abstract public boolean append(DataPoint[] currentDataPoints);
-    abstract public void initialize(List<DataPoint[]> currentSegment);
-    abstract public byte[] getModel(long startTime, long endTime, int samplingInterval, List<DataPoint[]> dps);
-    abstract public Segment get(int tid, long startTime, long endTime, int samplingInterval, byte[] model, byte[] offsets);
-    abstract public int length();
-    abstract public float size(long startTime, long endTime, int samplingInterval, List<DataPoint[]> dps);
 
+    // Returns true if managed to get within errorBound
+    // currentDataPoints - one DataPoint per group.
+    // In the configuration file you can set groups to be of 1 (.conf)
+    
+    // IN OUR CASE: currentDataPoints[0] is relevant
+    // You get datapoints one at a time
+    abstract public boolean append(DataPoint[] currentDataPoints);
+    
+    // [Lifecycle]
+    // 1. initialize(...)
+    // 2. append(...) until false
+    // 3. size(...) or length()
+    // 5. loop to 1.
+
+    // I shouldn't be worrying about the segments
+    abstract public void initialize(List<DataPoint[]> currentSegment);
+    
+    // 
+    abstract public byte[] getModel(long startTime, long endTime, int samplingInterval, List<DataPoint[]> dps);
+    
+    // get(...) - used to reconstruct the model from disk
+    abstract public Segment get(int tid, long startTime, long endTime, int samplingInterval, byte[] model, byte[] offsets);
+    
+    // Dimensionality of the subseries
+    abstract public int length();
+
+    // Size in bytes for the subsequence
+    // TODO: why float? :D 
+    abstract public float size(long startTime, long endTime, int samplingInterval, List<DataPoint[]> dps);
+    // IMPL: getModel.length
+
+    // tsA - "decompressed"
+    // tsB - "raw"
     public boolean withinErrorBound(float errorBound, Iterator<DataPoint> tsA, Iterator<DataPoint> tsB) {
         boolean allWithinErrorBound = true;
         while (allWithinErrorBound && tsA.hasNext() && tsB.hasNext()){

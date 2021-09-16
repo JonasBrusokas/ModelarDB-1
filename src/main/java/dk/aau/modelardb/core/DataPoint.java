@@ -18,9 +18,9 @@ public class DataPoint {
 
     /** Constructors **/
     public DataPoint(int tid, long timestamp, float value) {
-        this.tid = tid;
-        this.timestamp = timestamp;
-        this.value = value;
+        this.tid = tid; // Starts from 1
+        this.timestamp = timestamp; // UNIX timestamp
+        this.value = value; // purely float
     }
 
     /** Public Methods **/

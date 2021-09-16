@@ -20,6 +20,8 @@ import dk.aau.modelardb.core.utility.Static;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+// Easiest example - Poor Man's Compression (PMC)
+// Constant
 class PMC_MeanModelType extends ModelType {
 
     /** Constructors **/
@@ -115,7 +117,7 @@ class PMC_MeanSegment extends Segment {
     /** Constructors **/
     PMC_MeanSegment(int tid, long startTime, long endTime, int samplingInterval, byte[] model, byte[] offsets) {
         super(tid, startTime, endTime, samplingInterval, offsets);
-        this.value = ByteBuffer.wrap(model).getFloat();
+        this.value = ByteBuffer.wrap(model).getFloat(); // Nice way to """cast""" byte[] -> float
     }
 
     /** Public Methods **/
