@@ -57,6 +57,11 @@ object Main {
     /* Engine */
     EngineFactory.startEngine(configuration, storage)
 
+    // Engine is responsible for executing everything
+    // Storage is the last thing to close !!!
+
+    // TODO: just use the scripts that were given in the Compression project
+
     /* Cleanup */
     storage.close()
   }
