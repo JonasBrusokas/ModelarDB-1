@@ -1,0 +1,2 @@
+- ``sbt assembly`` - compiles the uber jar
+- ``sbt run`` 
