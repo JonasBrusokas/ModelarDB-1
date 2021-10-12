@@ -35,10 +35,12 @@ object Main {
   def main(args: Array[String]): Unit = {
 
     //ModelarDB checks args(0) for a config and uses $HOME/.modelardb.conf as a fallback
-    val fallback = System.getProperty("user.home") + "/.modelardb.conf"
+//    val fallback = System.getProperty("user.home") + "/.modelardb.conf"
+    val fallback = "/Users/jonasb/repos/ModelarDB-ext/modelardb.dev.conf"
     val configPath: String = if (args.length == 1) {
       args(0)
     } else if (new java.io.File(fallback).exists) {
+      println(s"Using fallback! Path: ${fallback}")
       fallback
     } else {
       println("usage: modelardb path/to/modelardb.conf")
