@@ -22,6 +22,7 @@ import dk.aau.modelardb.storage.StorageFactory
 
 import java.io.File
 import java.nio.file.{FileSystems, Paths}
+import java.time.{Instant, ZoneId}
 import java.util
 import java.util.TimeZone
 import java.util.concurrent.Executors
@@ -53,8 +54,15 @@ object Main {
     val configuration = readConfigurationFile(configPath)
     TimeZone.setDefault(configuration.getTimeZone) //Ensures all components use the same time zone
 
+    // Adding datetime stuff at the end of the output :)
+    var storageConfigurationString = configuration.getString("modelardb.storage")
+    if (storageConfigurationString.startsWith("parquet:")) {
+      val nowDate = Instant.now.atZone(ZoneId.systemDefault())
+      storageConfigurationString = storageConfigurationString + f"/${nowDate.getYear}${nowDate.getMonthValue}${nowDate.getDayOfMonth}_${nowDate.getHour}${nowDate.getMinute}${nowDate.getSecond}"
+      println(s"Added datetime suffix to storage config string. New string: ${storageConfigurationString}")
+    }
     /* Storage */
-    val storage = StorageFactory.getStorage(configuration.getString("modelardb.storage"))
+    val storage = StorageFactory.getStorage(storageConfigurationString)
 
     /* Engine */
     EngineFactory.startEngine(configuration, storage)
