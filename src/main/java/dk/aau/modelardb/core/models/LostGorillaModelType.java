@@ -59,6 +59,8 @@ class BitwiseOperations {
 
 //The implementation of this model type is based on code published by Michael Burman
 // under the Apache2 license. LINK: https://github.com/burmanm/gorilla-tsc
+
+// Attention, we found a lazy Gorilla with memory loss
 class LostFacebookGorillaModelType extends ModelType {
 
     private float actualErrorBound;
@@ -155,6 +157,7 @@ class LostFacebookGorillaModelType extends ModelType {
 //            xor = xor & getMask(digitsNotToMask);
 //        }
 
+        // Potentially smelly? We would like to avoid
         if (Math.abs(value - this.lastValFloat) <= this.actualErrorBound) {
             xor = 0;
         }
@@ -189,6 +192,7 @@ class LostFacebookGorillaModelType extends ModelType {
             }
         }
         this.lastVal = curVal;
+        this.lastValFloat = value;
     }
 
     /** Instance Variables **/
