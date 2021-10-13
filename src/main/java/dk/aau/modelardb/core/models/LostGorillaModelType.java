@@ -89,6 +89,7 @@ class LostFacebookGorillaModelType extends ModelType {
             int errorBoundExponent = BitwiseOperations.log2floor(this.actualErrorBound);
 
             this.lastVal = Float.floatToIntBits(firstValue);
+            this.lastValFloat = firstValue;
             this.compressed.writeBits(lastVal, Integer.SIZE);
             for (int i = 1; i < currentDataPoints.length; i++) {
                 compress(currentDataPoints[i].value);
@@ -154,8 +155,7 @@ class LostFacebookGorillaModelType extends ModelType {
 //            xor = xor & getMask(digitsNotToMask);
 //        }
 
-        if (Math.abs(value - this.lastVal) <= this.actualErrorBound) {
-            System.out.println("FOUND ONE");
+        if (Math.abs(value - this.lastValFloat) <= this.actualErrorBound) {
             xor = 0;
         }
 
@@ -194,6 +194,7 @@ class LostFacebookGorillaModelType extends ModelType {
     /** Instance Variables **/
     private BitBuffer compressed;
     private int lastVal;
+    private float lastValFloat;
     private int currentSize;
     private int storedLeadingZeros;
     private int storedTrailingZeros;
