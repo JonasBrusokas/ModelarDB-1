@@ -1,7 +1,5 @@
 package dk.aau.modelardb.core.models;
 
-import static dk.aau.modelardb.core.models.LostFacebookGorillaModelType.*;
-
 public class TestBitwiseOperations {
 
     public static void testTwo(Object value1, Object value2) {
@@ -15,19 +13,19 @@ public class TestBitwiseOperations {
     public static void main(String[] args) {
 
         // getMask tests
-        testTwo(getMask(0), 0);
-        testTwo(getMask(1), 0x400000);
-        testTwo(getMask(3), 0x700000);
+        testTwo(BitwiseOperations.getMask(0), 0);
+        testTwo(BitwiseOperations.getMask(1), 0x400000);
+        testTwo(BitwiseOperations.getMask(3), 0x700000);
 
         System.out.println(" >>> getFloatExponent");
 
         // getFloatExponent tests
-        testTwo(getFloatExponent((float) 0.5), -1);
-        testTwo(getFloatExponent((float)-0.5), -1);
-        testTwo(getFloatExponent((float) 0.25), -2);
-        testTwo(getFloatExponent((float) 128), 7);
-        testTwo(getFloatExponent((float) 256), 8);
-        testTwo(getFloatExponent((float)-256), 8);
+        testTwo(BitwiseOperations.getFloatExponent((float) 0.5), -1);
+        testTwo(BitwiseOperations.getFloatExponent((float)-0.5), -1);
+        testTwo(BitwiseOperations.getFloatExponent((float) 0.25), -2);
+        testTwo(BitwiseOperations.getFloatExponent((float) 128), 7);
+        testTwo(BitwiseOperations.getFloatExponent((float) 256), 8);
+        testTwo(BitwiseOperations.getFloatExponent((float)-256), 8);
 
         System.out.println(" >>> binaryOps");
 

@@ -21,26 +21,12 @@ import java.util.List;
 
 // Read about Gorilla: https://blog.acolyer.org/2016/05/03/gorilla-a-fast-scalable-in-memory-time-series-database/
 
-//The implementation of this model type is based on code published by Michael Burman
-// under the Apache2 license. LINK: https://github.com/burmanm/gorilla-tsc
-class LostFacebookGorillaModelType extends ModelType {
-
-    private float actualErrorBound;
-
-    /** Constructors **/
-    LostFacebookGorillaModelType(int mtid, float errorBound, int lengthBound) {
-        super(mtid, errorBound, lengthBound);
-    }
+class BitwiseOperations {
 
     static int log2floor(float number) {
         double v = Math.log(number) / Math.log(2);
         return (int) ((v < 0) ? Math.ceil(v) : Math.floor(v));
     }
-
-    // for float (32bit precision)
-    // SIGN (31) - EXPONENT (30-23) - FRACTION (22-0)
-    // if (leadingZeros >= 9) // SIGN and EXPONENT are same
-    // We can then use the error bound to see how many values we can drop
 
     static int getFloatExponent(float number) {
         if (number == 0.0) return 0;
@@ -69,12 +55,29 @@ class LostFacebookGorillaModelType extends ModelType {
         int exponent = Math.getExponent(x);
         return x / Math.pow(2, exponent);
     }
+}
+
+//The implementation of this model type is based on code published by Michael Burman
+// under the Apache2 license. LINK: https://github.com/burmanm/gorilla-tsc
+class LostFacebookGorillaModelType extends ModelType {
+
+    private float actualErrorBound;
+
+    /** Constructors **/
+    LostFacebookGorillaModelType(int mtid, float errorBound, int lengthBound) {
+        super(mtid, errorBound, lengthBound);
+    }
+
+    // for float (32bit precision)
+    // SIGN (31) - EXPONENT (30-23) - FRACTION (22-0)
+    // if (leadingZeros >= 9) // SIGN and EXPONENT are same
+    // We can then use the error bound to see how many values we can drop
 
     /** Public Methods **/
     @Override
     public boolean append(DataPoint[] currentDataPoints) {
 
-        getFloatExponent(2);
+        BitwiseOperations.getFloatExponent(2);
 
         if (this.currentSize == this.lengthBound) {
             return false;
@@ -83,7 +86,7 @@ class LostFacebookGorillaModelType extends ModelType {
         if (this.currentSize == 0) {
             float firstValue = currentDataPoints[0].value;
             this.actualErrorBound = (float) Math.floor(firstValue/100*errorBound);
-            int errorBoundExponent = log2floor(this.actualErrorBound);
+            int errorBoundExponent = BitwiseOperations.log2floor(this.actualErrorBound);
 
             this.lastVal = Float.floatToIntBits(firstValue);
             this.compressed.writeBits(lastVal, Integer.SIZE);
@@ -143,13 +146,17 @@ class LostFacebookGorillaModelType extends ModelType {
         int leadingZeros = Integer.numberOfLeadingZeros(xor);
         int trailingZeros = Integer.numberOfTrailingZeros(xor);
 
-        int unsignedLeadingZeros = Integer.numberOfLeadingZeros(xor & 0x7fffffff);
+//        int unsignedLeadingZeros = Integer.numberOfLeadingZeros(xor & 0x7fffffff);
+//        if (unsignedLeadingZeros >= 9) {
+//            // Special case
+//            int digitsNotToMask = getFloatExponent(curVal) - log2floor(this.actualErrorBound);
+//            if (digitsNotToMask < 0) digitsNotToMask = 0;
+//            xor = xor & getMask(digitsNotToMask);
+//        }
 
-        if (unsignedLeadingZeros >= 9) {
-            // Special case
-            int digitsNotToMask = getFloatExponent(curVal) - log2floor(this.actualErrorBound);
-            if (digitsNotToMask < 0) digitsNotToMask = 0;
-            xor = xor & getMask(digitsNotToMask);
+        if (Math.abs(value - this.lastVal) <= this.actualErrorBound) {
+            System.out.println("FOUND ONE");
+            xor = 0;
         }
 
         if (xor == 0) {
