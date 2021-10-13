@@ -1,4 +1,4 @@
-name := "ModelarDB"
+name := "ModelarDB-ext"
 scalaVersion := "2.12.14"
 scalacOptions ++= Seq("-opt:l:inline", "-opt-inline-from:<sources>", "-feature", "-deprecation", "-Xlint:_")
 
