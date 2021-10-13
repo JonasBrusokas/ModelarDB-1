@@ -192,7 +192,10 @@ class LostFacebookGorillaModelType extends ModelType {
             }
         }
         this.lastVal = curVal;
-        this.lastValFloat = value;
+
+        if (!(Math.abs(value - this.lastValFloat) <= this.actualErrorBound)) {
+            this.lastValFloat = value;
+        }
     }
 
     /** Instance Variables **/
