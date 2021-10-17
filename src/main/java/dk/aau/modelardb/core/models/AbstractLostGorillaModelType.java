@@ -159,11 +159,14 @@ public class AbstractLostGorillaModelType extends ModelType {
 //            xor = xor & getMask(digitsNotToMask);
 //        }
 
+        boolean usedIgnore = false;
+
         // Potentially smelly? We would like to avoid
         if (Math.abs(value - this.lastValFloat) <= this.actualErrorBound) {
             xor = 0;
         } else if (this.numberOfErrorIgnoresLeft > 0) {
             this.numberOfErrorIgnoresLeft--;
+            usedIgnore = true;
             xor = 0;
         }
 
@@ -198,7 +201,7 @@ public class AbstractLostGorillaModelType extends ModelType {
         }
         this.lastVal = curVal;
 
-        if (!(Math.abs(value - this.lastValFloat) <= this.actualErrorBound)) {
+        if ( !(Math.abs(value - this.lastValFloat) <= this.actualErrorBound) && !usedIgnore ) {
             this.lastValFloat = value;
         }
     }
