@@ -52,6 +52,7 @@ def collect_to_csv(path_json:str):
 
     return json_object, result_dict_list, raw_result_dict
 
+#%%
 if __name__ == '__main__':
 
     import os
@@ -69,7 +70,10 @@ if __name__ == '__main__':
     result_dict_list_flattened = flatten(result_dict_list)
     result_df = pd.DataFrame(result_dict_list_flattened)
 
-
+    result_df.to_csv(
+        os.path.join(compression_details_path, "output.csv"),
+        index=False,
+    )
 
     # json_path = "/Users/jonasb/repos/ModelarDB-ext/results/compression_details/lost_gorilla_v1.json"
     # obj, result_dict = collect_to_csv(json_path)
