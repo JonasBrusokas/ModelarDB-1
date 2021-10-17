@@ -1,0 +1,270 @@
+{
+  "file": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 13969211,
+        "('zstd', 2147483647)": 16663414,
+        "None": 27270276,
+        "gzip": 17707376,
+        "lz4": 24004837,
+        "snappy": 24138383
+      }
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 8561296,
+        "('zstd', 2147483647)": 8828929,
+        "None": 12989612,
+        "gzip": 10225894,
+        "lz4": 11166664,
+        "snappy": 11282207
+      }
+    }
+  },
+  "length": 1561660,
+  "model_type_unit": "data_points",
+  "size_unit": "bytes",
+  "value-E0": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 5961190,
+        "('zstd', 2147483647)": 7723694,
+        "None": 16365407,
+        "gzip": 8413003,
+        "lz4": 13271574,
+        "snappy": 13317550
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 85.69821166992188,
+      "Mean_Absolute_Percentage_Error": 2.7804964020106127e-07,
+      "Mean_Absolute_Value": 6.213621963979676e-05,
+      "Mean_Squared_Error": 0.00012375229562167078,
+      "Relative_Average_Error": 2.7385184798906598e-05,
+      "Relative_Error_Uniform_Norm": 0.9629988587635517
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 4701839,
+        "('zstd', 2147483647)": 4898336,
+        "None": 5569592,
+        "gzip": 4995611,
+        "lz4": 5378506,
+        "snappy": 5439086
+      }
+    }
+  },
+  "value-E1": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 5403421,
+        "('zstd', 2147483647)": 7125891,
+        "None": 15922404,
+        "gzip": 7910279,
+        "lz4": 12793591,
+        "snappy": 12873526
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 2411893.490924835,
+      "Mean_Absolute_Percentage_Error": 0.006176571827381849,
+      "Mean_Absolute_Value": 1.8839435577392578,
+      "Mean_Squared_Error": 652.6280517578125,
+      "Relative_Average_Error": 0.8303074648452391,
+      "Relative_Error_Uniform_Norm": 994.2393394824873
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 2563672,
+        "('zstd', 2147483647)": 2751731,
+        "None": 3424427,
+        "gzip": 2827093,
+        "lz4": 3160556,
+        "snappy": 3238958
+      }
+    }
+  },
+  "value-E10": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 3389331,
+        "('zstd', 2147483647)": 4854971,
+        "None": 13156074,
+        "gzip": 5518838,
+        "lz4": 10027939,
+        "snappy": 10107825
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 4711059.005832672,
+      "Mean_Absolute_Percentage_Error": 0.014402459375560284,
+      "Mean_Absolute_Value": 3.9933414459228516,
+      "Mean_Squared_Error": 4248.69580078125,
+      "Relative_Average_Error": 1.759978840148749,
+      "Relative_Error_Uniform_Norm": 1447.7515314900022
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 543756,
+        "('zstd', 2147483647)": 705109,
+        "None": 1269886,
+        "gzip": 720306,
+        "lz4": 955222,
+        "snappy": 1024432
+      }
+    }
+  },
+  "value-E2": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 4772395,
+        "('zstd', 2147483647)": 6409424,
+        "None": 15047161,
+        "gzip": 7181382,
+        "lz4": 11897004,
+        "snappy": 11982922
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 3317976.5728149414,
+      "Mean_Absolute_Percentage_Error": 0.013509796932339668,
+      "Mean_Absolute_Value": 2.6044468879699707,
+      "Mean_Squared_Error": 1013.236328125,
+      "Relative_Average_Error": 1.1478532264140715,
+      "Relative_Error_Uniform_Norm": 1432.3945575035277
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 1345070,
+        "('zstd', 2147483647)": 1517194,
+        "None": 2131742,
+        "gzip": 1556084,
+        "lz4": 1838465,
+        "snappy": 1906862
+      }
+    }
+  },
+  "value-E25": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 3325053,
+        "('zstd', 2147483647)": 4784616,
+        "None": 13075444,
+        "gzip": 5442161,
+        "lz4": 9940070,
+        "snappy": 10008199
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 6578201.1047439575,
+      "Mean_Absolute_Percentage_Error": 0.017480161041021347,
+      "Mean_Absolute_Value": 5.9448370933532715,
+      "Mean_Squared_Error": 7045.287109375,
+      "Relative_Average_Error": 2.6200574970296913,
+      "Relative_Error_Uniform_Norm": 1521.9420932773735
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 505478,
+        "('zstd', 2147483647)": 669407,
+        "None": 1227408,
+        "gzip": 683055,
+        "lz4": 913333,
+        "snappy": 985018
+      }
+    }
+  },
+  "value-E5": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 3752611,
+        "('zstd', 2147483647)": 5264724,
+        "None": 13696904,
+        "gzip": 5955470,
+        "lz4": 10540923,
+        "snappy": 10617066
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 3904379.043964386,
+      "Mean_Absolute_Percentage_Error": 0.014666605740785599,
+      "Mean_Absolute_Value": 3.1254749298095703,
+      "Mean_Squared_Error": 2393.958251953125,
+      "Relative_Average_Error": 1.3774846569051864,
+      "Relative_Error_Uniform_Norm": 1447.7515314900022
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 763191,
+        "('zstd', 2147483647)": 929818,
+        "None": 1506675,
+        "gzip": 950629,
+        "lz4": 1199593,
+        "snappy": 1267640
+      }
+    }
+  },
+  "value-E50": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 3313270,
+        "('zstd', 2147483647)": 4773122,
+        "None": 13061519,
+        "gzip": 5430041,
+        "lz4": 9926876,
+        "snappy": 9997480
+      }
+    },
+    "metrics": {
+      "Fast_Dynamic_Time_Warping": 8186346.373882294,
+      "Mean_Absolute_Percentage_Error": 0.027664387598633766,
+      "Mean_Absolute_Value": 8.510112762451172,
+      "Mean_Squared_Error": 9028.9150390625,
+      "Relative_Average_Error": 3.7506456611760624,
+      "Relative_Error_Uniform_Norm": 2679.1822961858375
+    },
+    "model_types": {
+      "dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5": 1561660
+    },
+    "segments": {
+      "parquet": {
+        "('brotli', 2147483647)": 498285,
+        "('zstd', 2147483647)": 663215,
+        "None": 1221360,
+        "gzip": 675926,
+        "lz4": 905440,
+        "snappy": 977801
+      }
+    }
+  },
+  "value-R": {
+    "data_points": {
+      "parquet": {
+        "('brotli', 2147483647)": 5960086,
+        "('zstd', 2147483647)": 7723168,
+        "None": 16365226,
+        "gzip": 8414186,
+        "lz4": 13271367,
+        "snappy": 13317370
+      }
+    }
+  }
+}
