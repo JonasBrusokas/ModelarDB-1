@@ -61,13 +61,17 @@ class BitwiseOperations {
 // under the Apache2 license. LINK: https://github.com/burmanm/gorilla-tsc
 
 // Attention, we found a lazy Gorilla with memory loss
-class LostFacebookGorillaModelType extends ModelType {
+public class AbstractLostGorillaModelType extends ModelType {
 
-    private float actualErrorBound;
+    protected float actualErrorBound;
+    protected float deltaErrorBound; // Percentage ptsIgnoringErrorBound/totalPts
+    protected int numberOfErrorIgnoresLeft;
 
     /** Constructors **/
-    LostFacebookGorillaModelType(int mtid, float errorBound, int lengthBound) {
+    AbstractLostGorillaModelType(int mtid, float errorBound, int lengthBound, float deltaErrorBound) {
         super(mtid, errorBound, lengthBound);
+        this.deltaErrorBound = deltaErrorBound;
+        this.numberOfErrorIgnoresLeft = (int)Math.floor(lengthBound * (deltaErrorBound/100) );
     }
 
     // for float (32bit precision)
@@ -79,8 +83,6 @@ class LostFacebookGorillaModelType extends ModelType {
     @Override
     public boolean append(DataPoint[] currentDataPoints) {
 
-        BitwiseOperations.getFloatExponent(2);
-
         if (this.currentSize == this.lengthBound) {
             return false;
         }
@@ -88,7 +90,7 @@ class LostFacebookGorillaModelType extends ModelType {
         if (this.currentSize == 0) {
             float firstValue = currentDataPoints[0].value;
             this.actualErrorBound = (float) Math.floor(firstValue/100*errorBound);
-            int errorBoundExponent = BitwiseOperations.log2floor(this.actualErrorBound);
+//            int errorBoundExponent = BitwiseOperations.log2floor(this.actualErrorBound);
 
             this.lastVal = Float.floatToIntBits(firstValue);
             this.lastValFloat = firstValue;
@@ -160,6 +162,9 @@ class LostFacebookGorillaModelType extends ModelType {
         // Potentially smelly? We would like to avoid
         if (Math.abs(value - this.lastValFloat) <= this.actualErrorBound) {
             xor = 0;
+        } else if (this.numberOfErrorIgnoresLeft > 0) {
+            this.numberOfErrorIgnoresLeft--;
+            xor = 0;
         }
 
         if (xor == 0) {
@@ -199,102 +204,102 @@ class LostFacebookGorillaModelType extends ModelType {
     }
 
     /** Instance Variables **/
-    private BitBuffer compressed;
-    private int lastVal;
-    private float lastValFloat;
-    private int currentSize;
-    private int storedLeadingZeros;
-    private int storedTrailingZeros;
+    protected BitBuffer compressed;
+    protected int lastVal;
+    protected float lastValFloat;
+    protected int currentSize;
+    protected int storedLeadingZeros;
+    protected int storedTrailingZeros;
 }
 
 
 // TODO: consider extending from FacebookGorillaSegment
-class LostFacebookGorillaSegment extends Segment {
-
-    /** Constructors **/
-    LostFacebookGorillaSegment(int tid, long startTime, long endTime, int samplingInterval, byte[] model, byte[] offsets) {
-        //Unlike length(), capacity() is not impacted by changes to the segment's start time
-        super(tid, startTime, endTime, samplingInterval, offsets);
-        this.values = decompress(model, super.capacity());
-    }
-
-    /** Public Methods **/
-    @Override
-    public float min() {
-        float min = Float.MAX_VALUE;
-        int inc = getGroupSize();
-        int init = inc * getTemporalOffset() + getGroupOffset();
-        int length = init + inc * this.length();
-        for (int index = init; index < length; index += inc) {
-            min = Float.min(min, this.values[index]);
-        }
-        return min;
-    }
-
-    @Override
-    public float max() {
-        float max = -Float.MAX_VALUE;
-        int inc = getGroupSize();
-        int init = inc * getTemporalOffset() + getGroupOffset();
-        int length = init + inc * this.length();
-        for (int index = init; index < length; index += inc) {
-            max = Float.max(max, this.values[index]);
-        }
-        return max;
-    }
-
-    @Override
-    public double sum() {
-        double acc = 0;
-        int inc = getGroupSize();
-        int init = inc * getTemporalOffset() + getGroupOffset();
-        int length = init + inc * this.length();
-        for (int index = init; index < length; index += inc) {
-            acc += this.values[index];
-        }
-        return acc;
-    }
-
-    /** Protected Methods **/
-    @Override
-    protected float get(long timestamp, int index) {
-        return this.values[index];
-    }
-
-    /** Private Methods **/
-    private float[] decompress(byte[] values, int length) {
-        float[] result = new float[length];
-        BitBuffer bitBuffer = new BitBuffer(values);
-
-        int storedLeadingZeros = Integer.MAX_VALUE;
-        int storedTrailingZeros = 0;
-        int lastVal = bitBuffer.getInt(Integer.SIZE);
-        result[0] = Float.intBitsToFloat(lastVal);
-
-        for (int i = 1; i < length; i++) {
-            if (bitBuffer.readBit()) {
-                if (bitBuffer.readBit()) {
-                    //New leading and trailing zeros
-                    storedLeadingZeros = bitBuffer.getInt(5);
-                    byte significantBits = (byte) bitBuffer.getInt(6);
-                    if (significantBits == 0) {
-                        significantBits = 32;
-                    }
-                    storedTrailingZeros = 32 - significantBits - storedLeadingZeros;
-                }
-
-                int value = bitBuffer.getInt(32 - storedLeadingZeros - storedTrailingZeros);
-                value <<= storedTrailingZeros;
-                value = lastVal ^ value;
-                lastVal = value;
-                result[i] = Float.intBitsToFloat(lastVal);
-            } else {
-                result[i] = Float.intBitsToFloat(lastVal);
-            }
-        }
-        return result;
-    }
-
-    /** Instance Variables **/
-    private final float[] values;
-}
+//class LostFacebookGorillaSegment extends Segment {
+//
+//    /** Constructors **/
+//    LostFacebookGorillaSegment(int tid, long startTime, long endTime, int samplingInterval, byte[] model, byte[] offsets) {
+//        //Unlike length(), capacity() is not impacted by changes to the segment's start time
+//        super(tid, startTime, endTime, samplingInterval, offsets);
+//        this.values = decompress(model, super.capacity());
+//    }
+//
+//    /** Public Methods **/
+//    @Override
+//    public float min() {
+//        float min = Float.MAX_VALUE;
+//        int inc = getGroupSize();
+//        int init = inc * getTemporalOffset() + getGroupOffset();
+//        int length = init + inc * this.length();
+//        for (int index = init; index < length; index += inc) {
+//            min = Float.min(min, this.values[index]);
+//        }
+//        return min;
+//    }
+//
+//    @Override
+//    public float max() {
+//        float max = -Float.MAX_VALUE;
+//        int inc = getGroupSize();
+//        int init = inc * getTemporalOffset() + getGroupOffset();
+//        int length = init + inc * this.length();
+//        for (int index = init; index < length; index += inc) {
+//            max = Float.max(max, this.values[index]);
+//        }
+//        return max;
+//    }
+//
+//    @Override
+//    public double sum() {
+//        double acc = 0;
+//        int inc = getGroupSize();
+//        int init = inc * getTemporalOffset() + getGroupOffset();
+//        int length = init + inc * this.length();
+//        for (int index = init; index < length; index += inc) {
+//            acc += this.values[index];
+//        }
+//        return acc;
+//    }
+//
+//    /** Protected Methods **/
+//    @Override
+//    protected float get(long timestamp, int index) {
+//        return this.values[index];
+//    }
+//
+//    /** Private Methods **/
+//    private float[] decompress(byte[] values, int length) {
+//        float[] result = new float[length];
+//        BitBuffer bitBuffer = new BitBuffer(values);
+//
+//        int storedLeadingZeros = Integer.MAX_VALUE;
+//        int storedTrailingZeros = 0;
+//        int lastVal = bitBuffer.getInt(Integer.SIZE);
+//        result[0] = Float.intBitsToFloat(lastVal);
+//
+//        for (int i = 1; i < length; i++) {
+//            if (bitBuffer.readBit()) {
+//                if (bitBuffer.readBit()) {
+//                    //New leading and trailing zeros
+//                    storedLeadingZeros = bitBuffer.getInt(5);
+//                    byte significantBits = (byte) bitBuffer.getInt(6);
+//                    if (significantBits == 0) {
+//                        significantBits = 32;
+//                    }
+//                    storedTrailingZeros = 32 - significantBits - storedLeadingZeros;
+//                }
+//
+//                int value = bitBuffer.getInt(32 - storedLeadingZeros - storedTrailingZeros);
+//                value <<= storedTrailingZeros;
+//                value = lastVal ^ value;
+//                lastVal = value;
+//                result[i] = Float.intBitsToFloat(lastVal);
+//            } else {
+//                result[i] = Float.intBitsToFloat(lastVal);
+//            }
+//        }
+//        return result;
+//    }
+//
+//    /** Instance Variables **/
+//    private final float[] values;
+//}
