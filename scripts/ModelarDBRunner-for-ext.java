@@ -239,6 +239,15 @@ class Main {
         case "LG":
           selectedModels.add("dk.aau.modelardb.core.models.LostFacebookGorillaModelType");
           break;
+        case "LG5":
+          selectedModels.add("dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD5");
+          break;
+        case "LG10":
+          selectedModels.add("dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD10");
+          break;
+        case "LG25":
+          selectedModels.add("dk.aau.modelardb.core.models.LostFacebookGorillaModelTypeD25");
+          break;
         default:
           try {
             Integer.parseInt(args[i]); //Ignore error bounds
