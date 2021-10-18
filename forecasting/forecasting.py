@@ -15,7 +15,9 @@ if __name__ == '__main__':
         for x, y in dl:
             y_hat_proper = scaler.inverse_transform(model(x).detach())
             y_proper = scaler.inverse_transform(y)
-            list_test_rmse.append(np.sqrt(mean_squared_error(y_hat_proper, y_proper)))
+            list_test_rmse.append( np.sqrt(mean_squared_error(y_hat_proper, y_proper))
+                                   / len(y_proper) if len(y_proper) != 0 else 1
+                                 )
             list_ys.append( (y_proper, y_hat_proper) )
         return float(np.mean(np.stack(list_test_rmse))), list_ys
 
@@ -29,7 +31,7 @@ if __name__ == '__main__':
                     output_name: str,
                     ):
 
-        df = df.head(10000) # TODO: REMOVE!
+        # df = df.head(100000) # TODO: REMOVE!
         dm = DataModule(df,
                         memory=memory,
                         horizon=horizon,
@@ -43,7 +45,8 @@ if __name__ == '__main__':
         cpu_device = torch.device('cpu')
         model = model.to(device)
         loss_foo = root_mean_squared_error()
-        optimizer = torch.optim.Adam(model.parameters())
+        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+        scheduler_lr = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=lr_gamma)
 
         ###
         # Training loop
@@ -64,6 +67,7 @@ if __name__ == '__main__':
 
                 loss.backward()
                 optimizer.step()
+            scheduler_lr.step()
 
             epoch_loss = np.mean(np.stack(loss_list))
             print(f"Loss at epoch={epoch+1}: {float(epoch_loss)}, took: {DateUtils.now() - before_training}")
@@ -83,9 +87,11 @@ if __name__ == '__main__':
 
     horizon = 30
     memory = 60
-    batch_size = 128
-    hidden_size = 16
+    batch_size = 1024 * 2
+    hidden_size = 32
     epochs = 15
+    learning_rate = 0.001
+    lr_gamma = 0.9
 
     before_everything = DateUtils.now()
 
@@ -139,13 +145,16 @@ if __name__ == '__main__':
                 output_dict = {
                     'dataset_name': dataset_name,
                     'model_type': model_type,
-                    'error_bound': error_bound,
+                    'error_bound': error_bound if (error_bound is not None) else -1,
                     'epochs': epochs,
                     'memory': memory,
                     'horizon': horizon,
+                    'batch_size': batch_size,
                     'hidden_size': hidden_size if (model_type != 'lr') else -1,
                     'rmse': rmse,
                     'train_start': before_training,
+                    'lr': learning_rate,
+                    'lr_gamma': lr_gamma,
                 }
                 output_csv_df = None
                 try:
