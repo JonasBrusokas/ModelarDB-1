@@ -1,7 +1,31 @@
 import numpy as np
+import pandas as pd
 
 import torch
 from torch.utils.data import Dataset, TensorDataset, DataLoader
+
+class DataModule:
+
+    def __init__(self,
+                 df: pd.DataFrame,
+                 memory: int,
+                 horizon: int,
+                 batch_size: int,
+                 flatten_xs: bool,
+                 ):
+        pass
+
+    def setup(self):
+        pass
+
+    def train_dataloader(self):
+        pass
+
+    def val_dataloader(self):
+        pass
+
+    def test_dataloader(self):
+        pass
 
 class TSDataset(Dataset):
     '''
@@ -12,16 +36,16 @@ class TSDataset(Dataset):
       of `(batch_size, seq_len, n_features)` shape.
     Suitable as an input to RNNs.
     '''
-    # TODO: remove seq_len
     def __init__(self,
                  ts: np.ndarray,
                  memory: int,
-                 horizon: int
+                 horizon: int,
+                 flatten: bool = False,
                  ):
-        # TODO: is the .float necessary here
         self.ts_tensor = torch.tensor(ts).float()
         self.memory_length = memory
         self.horizon_length = horizon
+        self.flatten = flatten
 
     def __len__(self):
         # return self.X.__len__() - (self.seq_len-1)
@@ -31,11 +55,18 @@ class TSDataset(Dataset):
         # return (self.X[index:index+self.seq_len], self.y[index+self.seq_len-1])
         x_border = index + self.memory_length
         y_border = x_border + self.horizon_length
-        return (self.ts_tensor[index: x_border],
-                self.ts_tensor[x_border: y_border])
+
+        x = self.ts_tensor[index: x_border]
+        y = self.ts_tensor[x_border: y_border]
+
+        return (x,y) if self.flatten else (x.unsqueeze(1), y.unsqueeze(1))
 
 if __name__ == '__main__':
-    dataset = TSDataset(np.array(list(range(0, 32))), memory=8, horizon=4)
+    dataset = TSDataset(
+        np.array(list(range(0, 32))),
+        memory=8, horizon=4,
+        flatten=False
+    )
 
     for x, y in dataset:
         x_i, y_i = x, y
