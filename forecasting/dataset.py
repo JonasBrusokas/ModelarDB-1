@@ -40,7 +40,7 @@ class TSDataset(Dataset):
         x = self.ts_tensor[index: x_border]
         y = self.ts_tensor[x_border: y_border]
 
-        return (x,y) if self.flatten else (x.unsqueeze(1), y.unsqueeze(1))
+        return (x,y) if self.flatten else (x.unsqueeze(1), y)
 
 class DataModule:
 
