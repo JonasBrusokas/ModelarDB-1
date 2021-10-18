@@ -4,7 +4,7 @@ public class LostFacebookGorillaModelTypeD25 extends LostFacebookGorillaModelTyp
 
     public LostFacebookGorillaModelTypeD25(int mtid, float errorBound, int lengthBound) {
         super(mtid, errorBound, lengthBound);
-        this.abstractLostGorillaModelType = new AbstractLostGorillaModelType(mtid, errorBound, lengthBound, (float)10.0);
+        this.abstractLostGorillaModelType = new AbstractLostGorillaModelType(mtid, errorBound, lengthBound, (float)25.0);
     }
 
 }

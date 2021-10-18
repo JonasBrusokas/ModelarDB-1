@@ -65,13 +65,16 @@ public class AbstractLostGorillaModelType extends ModelType {
 
     protected float actualErrorBound;
     protected float deltaErrorBound; // Percentage ptsIgnoringErrorBound/totalPts
+    protected int numberOfErrorIgnores;
     protected int numberOfErrorIgnoresLeft;
 
     /** Constructors **/
     AbstractLostGorillaModelType(int mtid, float errorBound, int lengthBound, float deltaErrorBound) {
         super(mtid, errorBound, lengthBound);
         this.deltaErrorBound = deltaErrorBound;
-        this.numberOfErrorIgnoresLeft = (int)Math.floor(lengthBound * (deltaErrorBound/100) );
+        this.numberOfErrorIgnores = (int)Math.floor(lengthBound * (deltaErrorBound/100) );
+        this.numberOfErrorIgnoresLeft = numberOfErrorIgnores;
+        System.out.println("Created");
     }
 
     // for float (32bit precision)
@@ -90,7 +93,7 @@ public class AbstractLostGorillaModelType extends ModelType {
         if (this.currentSize == 0) {
             float firstValue = currentDataPoints[0].value;
             this.actualErrorBound = (float) Math.floor(firstValue/100*errorBound);
-//            int errorBoundExponent = BitwiseOperations.log2floor(this.actualErrorBound);
+            this.numberOfErrorIgnoresLeft = this.numberOfErrorIgnores;
 
             this.lastVal = Float.floatToIntBits(firstValue);
             this.lastValFloat = firstValue;
