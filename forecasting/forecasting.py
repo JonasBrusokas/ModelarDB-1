@@ -21,5 +21,15 @@ y_train_ds = TSDataset(y_train, 8, 4)
 y_train_dl = DataLoader(y_train_ds,
                          batch_size = 128,
                          shuffle = False,
-                         num_workers = 1)
+                         num_workers = 0)
+
+dm = DataModule(df,
+                16,
+                4,
+                32,
+                False,
+                None)
+for X, y in dm.train_dataloader():
+    x_i, y_i = X, y
+    break
 
