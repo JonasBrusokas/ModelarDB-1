@@ -8,7 +8,7 @@ from models import *
 if __name__ == '__main__':
 
     df = pd.read_parquet("/Users/jonasb/repos/ModelarDB-ext/data/REDD-Cleaned-f32/house_1-channel_1_output_data_points.parquet")
-    df = df.head(10000)
+    df = df.head(100000)
     DATETIME_COL = 'datetime'
 
     df[DATETIME_COL] = pd.to_datetime(df[DATETIME_COL], unit='ms')
