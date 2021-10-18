@@ -102,7 +102,6 @@ if __name__ == '__main__':
     df = pd.read_parquet("/Users/jonasb/repos/ModelarDB-ext/data/REDD-Cleaned-f32/house_1-channel_1_output_data_points.parquet")
     dm = DataModule(df, 16, 4, 32, False, None)
 
-    # TODO: this
     for x, y in dm.train_dataloader():
         x_id, y_id = x, y
         break
