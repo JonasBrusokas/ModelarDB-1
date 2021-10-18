@@ -1,13 +1,14 @@
-import datetime
-
-import pandas as pd
-
 from dataset import *
 from models import *
 
+from utils import *
+from sklearn.metrics import mean_squared_error
+
 if __name__ == '__main__':
 
-    df = pd.read_parquet("/Users/jonasb/repos/ModelarDB-ext/data/REDD-Cleaned-f32/house_1-channel_1_output_data_points.parquet")
+    FileUtils.project_root_dir()
+
+    df = pd.read_parquet(f"{os.path.join(FileUtils.project_root_dir(), 'data','REDD-Cleaned-f32','house_1-channel_1_output_data_points.parquet')}")
     df = df.head(100000)
     DATETIME_COL = 'datetime'
 
@@ -20,18 +21,21 @@ if __name__ == '__main__':
 
     #%%
 
-    def test_model(model, dl, metric = root_mean_squared_error()):
+
+    def test_model(model, dl, scaler: StandardScaler, metric = root_mean_squared_error()):
         # TODO: remember to compare against RAW dl also
         list_test_rmse = []
         for x, y in dl:
-            list_test_rmse.append(metric(model(x), y))
-        return torch.mean(torch.stack(list_test_rmse)).detach().item()
+            y_hat_proper = scaler.inverse_transform(model(x).detach())
+            y_proper = scaler.inverse_transform(y)
+            list_test_rmse.append(np.sqrt(mean_squared_error(y_hat_proper, y_proper)))
+        return float(np.mean(np.stack(list_test_rmse)))
 
     horizon = 30
     memory = 60
     batch_size = 128
     hidden_size = 48
-    epochs = 5
+    epochs = 2
 
     dm = DataModule(df,
                     memory=memory,
@@ -44,7 +48,8 @@ if __name__ == '__main__':
                              output_length=horizon)
     train_dataloader = dm.train_dataloader()
 
-    device = torch.device('cpu')
+    device = torch.device('cuda')
+    cpu_device = torch.device('cpu')
     model = model.to(device)
     loss_foo = root_mean_squared_error()
     optimizer = torch.optim.Adam(model.parameters())
@@ -52,7 +57,7 @@ if __name__ == '__main__':
     ###
     # Training loop
 
-    before_training = datetime.datetime.now()
+    before_training = DateUtils.now()
     for epoch in range(0, epochs):
         loss_list = []
         for x, y in train_dataloader:
@@ -70,8 +75,11 @@ if __name__ == '__main__':
             optimizer.step()
 
         epoch_loss = np.mean(np.stack(loss_list))
-        print(f"Loss at epoch={epoch+1}: {float(epoch_loss)}, took: {datetime.datetime.now() - before_training}")
+        print(f"Loss at epoch={epoch+1}: {float(epoch_loss)}, took: {DateUtils.now() - before_training}")
 
-    print(f"Test results: {test_model(model, dm.test_dataloader())}")
+    model = model.to(cpu_device)
+    model.eval()
+    test_rmse = test_model(model, dm.test_dataloader(), scaler=dm.scaler)
+    print(f"Test RMSE: {test_rmse}")
 
 
