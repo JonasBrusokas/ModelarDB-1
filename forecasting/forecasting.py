@@ -38,6 +38,12 @@ if __name__ == '__main__':
                         batch_size=batch_size,
                         flatten_xs=flatten_xs,
                         error_bound=error_bound)
+        raw_dm = DataModule(df,
+                        memory=memory,
+                        horizon=horizon,
+                        batch_size=batch_size,
+                        flatten_xs=flatten_xs,
+                        error_bound=None)
 
         train_dataloader = dm.train_dataloader()
 
@@ -74,23 +80,28 @@ if __name__ == '__main__':
 
         model = model.to(cpu_device)
         model.eval()
-        test_rmse, list_ys = test_model(model, dm.test_dataloader(), scaler=dm.scaler)
 
-        total_test_ys = np.concatenate(list(map(lambda array: np.stack(array).reshape(-1, 60), list_ys)), axis=0)
-        columns = [f"y_{h_i}" for h_i in range(horizon)] + [f"y_hat_{h_i}" for h_i in range(horizon)]
-        ys_df = pd.DataFrame(total_test_ys, columns=columns)
-        ys_output_file_path = f"{os.path.join(output_parent_folder, f'{output_name}_y_outputs.csv')}"
-        ys_df.to_csv(ys_output_file_path)
+        test_rmse, raw_test_rmse = -1.0, -1.0
+        for y_type in ["raw", "compressed"]:
+            if (y_type == "raw"):
+                test_rmse, list_ys = test_model(model, dm.test_dataloader(), scaler=dm.scaler)
+            else:
+                raw_test_rmse, list_ys = test_model(model, raw_dm.test_dataloader(), scaler=dm.scaler)
+            total_test_ys = np.concatenate(list(map(lambda array: np.stack(array).reshape(-1, 60), list_ys)), axis=0)
+            columns = [f"y_{h_i}" for h_i in range(horizon)] + [f"y_hat_{h_i}" for h_i in range(horizon)]
+            ys_df = pd.DataFrame(total_test_ys, columns=columns)
+            ys_output_file_path = f"{os.path.join(output_parent_folder, f'{output_name}_y_outputs_{y_type}.csv')}"
+            ys_df.to_csv(ys_output_file_path)
 
         # print(f"Test RMSE: {test_rmse}")
-        return model, float(test_rmse)
+        return model, float(test_rmse), float(raw_test_rmse)
 
     horizon = 30
     memory = 60
     batch_size = 1024 * 2
     hidden_size = 32
     epochs = 15
-    learning_rate = 0.001
+    learning_rate = 0.005
     lr_gamma = 0.9
 
     before_everything = DateUtils.now()
@@ -132,7 +143,7 @@ if __name__ == '__main__':
 
                 dataset_name = str(Path(parquet_path).parent.name)
                 before_training = DateUtils.now()
-                trained_model, rmse = train_model(
+                trained_model, rmse, raw_rmse = train_model(
                     df,
                     model=model,
                     memory=memory,
@@ -152,6 +163,7 @@ if __name__ == '__main__':
                     'batch_size': batch_size,
                     'hidden_size': hidden_size if (model_type != 'lr') else -1,
                     'rmse': rmse,
+                    'rmse_on_raw': raw_rmse,
                     'train_start': before_training,
                     'lr': learning_rate,
                     'lr_gamma': lr_gamma,
