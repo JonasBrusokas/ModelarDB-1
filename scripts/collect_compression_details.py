@@ -56,7 +56,8 @@ def collect_to_csv(path_json:str):
 if __name__ == '__main__':
 
     import os
-    compression_details_path = "/Users/jonasb/repos/ModelarDB-ext/results/compression_details"
+    from utils import *
+    compression_details_path = f"{os.path.join(FileUtils.project_root_dir(), 'results', 'compression_details')}"
     compression_detail_files = list(filter(lambda file_path: file_path.endswith(".json"), os.listdir(compression_details_path)))
 
     result_dict_list = []

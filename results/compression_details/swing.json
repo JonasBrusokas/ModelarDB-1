@@ -1,0 +1,277 @@
+{
+    "file": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 32013311,
+                "('zstd', 2147483647)": 41161452,
+                "None": 60993517,
+                "gzip": 42113291,
+                "lz4": 57885918,
+                "snappy": 57904943
+            }
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 15585709,
+                "('zstd', 2147483647)": 17586607,
+                "None": 42270595,
+                "gzip": 20956199,
+                "lz4": 31082784,
+                "snappy": 31055453
+            }
+        }
+    },
+    "length": 1561660,
+    "model_type_unit": "data_points",
+    "size_unit": "bytes",
+    "value-E0": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 5960103,
+                "('zstd', 2147483647)": 7723185,
+                "None": 16365243,
+                "gzip": 8414203,
+                "lz4": 13271384,
+                "snappy": 13317387
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 0.0,
+            "Mean_Absolute_Percentage_Error": 0.0,
+            "Mean_Absolute_Value": 0.0,
+            "Mean_Squared_Error": 0.0,
+            "Relative_Average_Error": 0.0,
+            "Relative_Error_Uniform_Norm": 0.0
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1551288,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 10372
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 9245336,
+                "('zstd', 2147483647)": 10778558,
+                "None": 28749880,
+                "gzip": 12696661,
+                "lz4": 20060779,
+                "snappy": 19969779
+            }
+        }
+    },
+    "value-E1": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 7417609,
+                "('zstd', 2147483647)": 9718839,
+                "None": 19551667,
+                "gzip": 10552915,
+                "lz4": 16407453,
+                "snappy": 16491413
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 915258.4552345276,
+            "Mean_Absolute_Percentage_Error": 0.0033378973603248596,
+            "Mean_Absolute_Value": 0.7264126539230347,
+            "Mean_Squared_Error": 3.235646963119507,
+            "Relative_Average_Error": 0.3201505859050884,
+            "Relative_Error_Uniform_Norm": 0.9990060109315299
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1559294,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 2366
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 4117162,
+                "('zstd', 2147483647)": 4511584,
+                "None": 7883620,
+                "gzip": 4977960,
+                "lz4": 6522260,
+                "snappy": 6539787
+            }
+        }
+    },
+    "value-E10": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 6682725,
+                "('zstd', 2147483647)": 9380723,
+                "None": 19632375,
+                "gzip": 10027115,
+                "lz4": 16528202,
+                "snappy": 16579934
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 4814634.630401611,
+            "Mean_Absolute_Percentage_Error": 0.02244194783270359,
+            "Mean_Absolute_Value": 5.361740589141846,
+            "Mean_Squared_Error": 296.6791687011719,
+            "Relative_Average_Error": 2.363070714062214,
+            "Relative_Error_Uniform_Norm": 9.989975655318762
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1560185,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 1475
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 412518,
+                "('zstd', 2147483647)": 469701,
+                "None": 762223,
+                "gzip": 506499,
+                "lz4": 644185,
+                "snappy": 647779
+            }
+        }
+    },
+    "value-E2": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 7326210,
+                "('zstd', 2147483647)": 9910984,
+                "None": 19601665,
+                "gzip": 10708214,
+                "lz4": 16506549,
+                "snappy": 16553081
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 1478450.7680397034,
+            "Mean_Absolute_Percentage_Error": 0.00693861348554492,
+            "Mean_Absolute_Value": 1.3916294574737549,
+            "Mean_Squared_Error": 9.711115837097168,
+            "Relative_Average_Error": 0.6133301718408574,
+            "Relative_Error_Uniform_Norm": 1.9979977588178452
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1559946,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 1714
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 2190554,
+                "('zstd', 2147483647)": 2444296,
+                "None": 3928170,
+                "gzip": 2620108,
+                "lz4": 3324760,
+                "snappy": 3343675
+            }
+        }
+    },
+    "value-E25": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 6769960,
+                "('zstd', 2147483647)": 9465120,
+                "None": 19633571,
+                "gzip": 10045583,
+                "lz4": 16511568,
+                "snappy": 16578460
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 12196830.745994568,
+            "Mean_Absolute_Percentage_Error": 0.03532477095723152,
+            "Mean_Absolute_Value": 10.673172950744629,
+            "Mean_Squared_Error": 1762.3768310546875,
+            "Relative_Average_Error": 4.703968735508238,
+            "Relative_Error_Uniform_Norm": 24.973951984091293
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1560189,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 1471
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 376739,
+                "('zstd', 2147483647)": 428867,
+                "None": 710611,
+                "gzip": 466918,
+                "lz4": 597641,
+                "snappy": 600819
+            }
+        }
+    },
+    "value-E5": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 6994186,
+                "('zstd', 2147483647)": 9592051,
+                "None": 19626340,
+                "gzip": 10235454,
+                "lz4": 16526302,
+                "snappy": 16577328
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 3215432.2347335815,
+            "Mean_Absolute_Percentage_Error": 0.014892605133354664,
+            "Mean_Absolute_Value": 2.849680185317993,
+            "Mean_Squared_Error": 65.98258972167969,
+            "Relative_Average_Error": 1.2559347225370372,
+            "Relative_Error_Uniform_Norm": 4.995002263630691
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1560168,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 1492
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 685573,
+                "('zstd', 2147483647)": 775946,
+                "None": 1209298,
+                "gzip": 829623,
+                "lz4": 1033566,
+                "snappy": 1043161
+            }
+        }
+    },
+    "value-E50": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 6810578,
+                "('zstd', 2147483647)": 9643578,
+                "None": 19637293,
+                "gzip": 10273605,
+                "lz4": 16527600,
+                "snappy": 16573525
+            }
+        },
+        "metrics": {
+            "Fast_Dynamic_Time_Warping": 37115261.302827835,
+            "Mean_Absolute_Percentage_Error": 0.08459416776895523,
+            "Mean_Absolute_Value": 28.38454246520996,
+            "Mean_Squared_Error": 11370.283203125,
+            "Relative_Average_Error": 12.509868006504732,
+            "Relative_Error_Uniform_Norm": 49.94941297389528
+        },
+        "model_types": {
+            "dk.aau.modelardb.core.models.SwingFilterModelType": 1560193,
+            "dk.aau.modelardb.core.models.UncompressedModelType": 1467
+        },
+        "segments": {
+            "parquet": {
+                "('brotli', 2147483647)": 353460,
+                "('zstd', 2147483647)": 401990,
+                "None": 674697,
+                "gzip": 439580,
+                "lz4": 565691,
+                "snappy": 569216
+            }
+        }
+    },
+    "value-R": {
+        "data_points": {
+            "parquet": {
+                "('brotli', 2147483647)": 5960086,
+                "('zstd', 2147483647)": 7723168,
+                "None": 16365226,
+                "gzip": 8414186,
+                "lz4": 13271367,
+                "snappy": 13317370
+            }
+        }
+    }
+}
