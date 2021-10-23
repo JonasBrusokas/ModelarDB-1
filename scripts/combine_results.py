@@ -9,6 +9,7 @@ compression_csv_path_string = f"{os.path.join(FileUtils.project_root_dir(), 'res
 # Compression CSV
 compression_df = pd.read_csv(compression_csv_path_string)
 compression_df = compression_df.rename({'name': 'dataset_name'}, axis=1)
+compression_df.loc[ compression_df['dataset_name'] == 'raw', 'error_bound' ] = -1
 
 #%%
 # Forecasting CSV
@@ -64,15 +65,32 @@ print(f"dataset_name from compression_df: {compression_df_dataset_names}")
 
 print(f"Dataset names are equal: {set(renamed_proper_forecasting_df_dataset_names) == set(compression_df_dataset_names)}")
 
+#%%
+# Combining tables
+
+joined_df = renamed_proper_forecasting_df.merge(compression_df,
+                                   on=['dataset_name', 'error_bound'],
+                                   how='outer')
+print(f"Number of NaN values in joined_df: {joined_df.isnull().values.sum()}")
+
+#%%
+# Saving tables in separate files
+final_results_folder = os.path.join(FileUtils.project_root_dir(), 'results', 'final_results')
+FileUtils.create_dir(final_results_folder)
+
+renamed_proper_forecasting_df.to_csv(os.path.join(final_results_folder, 'forecasting_results.csv'), header=True, index=False)
+compression_df.to_csv(os.path.join(final_results_folder, 'compression_results.csv'), header=True, index=False)
+joined_df.to_csv(os.path.join(final_results_folder, 'joined_results.csv'), header=True, index=False)
+
+
+#%%
+# TODOs
 """
-TODO:
 - Make renaming work (unify the names) --- V
-- Join those tables
+- Join those tables --- V
 - Save all three (separate_1, _2, combined) dataframes in a folder
 
 - Make a list of charts worth plotting
 - Create a .ipynb notebook
 - Plot the charts 
 """
-
-""
