@@ -49,21 +49,24 @@ renamed_proper_forecasting_df = proper_forecasting_df.copy()
 # TODO: make this rename
 renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'pmc_only', 'dataset_name'] = 'pmc'
 renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lg_only', 'dataset_name'] = 'lost_gorilla_v1'
-renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d5', 'dataset_name'] = 'lg_v3_d5'
-renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d10', 'dataset_name'] = 'lg_v3_d10'
-renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d25', 'dataset_name'] = 'lg_v3_d25'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lg_v3_d5', 'dataset_name'] = 'lost_gorilla_v3_d5'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lg_v3_d10', 'dataset_name'] = 'lost_gorilla_v3_d10'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lg_v3_d25', 'dataset_name'] = 'lost_gorilla_v3_d25'
 
 
 print(f"Columns from renamed forecasting_df: {ListUtils.natural_sort(list(renamed_proper_forecasting_df.columns))}")
 print(f"Columns from compression_df: {ListUtils.natural_sort(list(compression_df.columns))}")
 
-print(f"dataset_name from renamed forecasting_df: {ListUtils.natural_sort(list(renamed_proper_forecasting_df['dataset_name'].unique()))}")
-print(f"dataset_name from compression_df: {ListUtils.natural_sort(list(compression_df['dataset_name'].unique()))}")
+renamed_proper_forecasting_df_dataset_names = ListUtils.natural_sort(list(renamed_proper_forecasting_df['dataset_name'].unique()))
+print(f"dataset_name from renamed forecasting_df: {renamed_proper_forecasting_df_dataset_names}")
+compression_df_dataset_names = ListUtils.natural_sort(list(compression_df['dataset_name'].unique()))
+print(f"dataset_name from compression_df: {compression_df_dataset_names}")
 
+print(f"Dataset names are equal: {set(renamed_proper_forecasting_df_dataset_names) == set(compression_df_dataset_names)}")
 
 """
 TODO:
-- Make renaming work (unify the names)
+- Make renaming work (unify the names) --- V
 - Join those tables
 - Save all three (separate_1, _2, combined) dataframes in a folder
 
@@ -71,3 +74,5 @@ TODO:
 - Create a .ipynb notebook
 - Plot the charts 
 """
+
+""
