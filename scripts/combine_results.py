@@ -8,8 +8,7 @@ compression_csv_path_string = f"{os.path.join(FileUtils.project_root_dir(), 'res
 #%%
 # Compression CSV
 compression_df = pd.read_csv(compression_csv_path_string)
-
-# Filter out LSTM (as the results are crap)
+compression_df = compression_df.rename({'name': 'dataset_name'}, axis=1)
 
 #%%
 # Forecasting CSV
@@ -32,5 +31,43 @@ proper_forecasting_raw_df
 proper_forecasting_df = proper_forecasting_df[ proper_forecasting_df['error_bound'] != -1]
 
 # Combining these two datasets into a combined one
-combined_forecasting_df = pd.concat([proper_forecasting_df, proper_forecasting_raw_df])
+proper_forecasting_df = pd.concat([proper_forecasting_df, proper_forecasting_raw_df])
 
+#%%
+# Rename values (on forecasting_df)
+# pmc_only -> pmc
+# lg_only -> lost_gorilla_v1
+# lost_gorilla_v3_d* -> lg_v3_d*
+
+print(f"dataset_name from forecasting_df: {ListUtils.natural_sort(list(proper_forecasting_df['dataset_name'].unique()))}")
+print(f"dataset_name from compression_df: {ListUtils.natural_sort(list(compression_df['dataset_name'].unique()))}")
+print()
+
+
+renamed_proper_forecasting_df = proper_forecasting_df.copy()
+
+# TODO: make this rename
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'pmc_only', 'dataset_name'] = 'pmc'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lg_only', 'dataset_name'] = 'lost_gorilla_v1'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d5', 'dataset_name'] = 'lg_v3_d5'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d10', 'dataset_name'] = 'lg_v3_d10'
+renamed_proper_forecasting_df.loc[renamed_proper_forecasting_df['dataset_name'] == 'lost_gorilla_v3_d25', 'dataset_name'] = 'lg_v3_d25'
+
+
+print(f"Columns from renamed forecasting_df: {ListUtils.natural_sort(list(renamed_proper_forecasting_df.columns))}")
+print(f"Columns from compression_df: {ListUtils.natural_sort(list(compression_df.columns))}")
+
+print(f"dataset_name from renamed forecasting_df: {ListUtils.natural_sort(list(renamed_proper_forecasting_df['dataset_name'].unique()))}")
+print(f"dataset_name from compression_df: {ListUtils.natural_sort(list(compression_df['dataset_name'].unique()))}")
+
+
+"""
+TODO:
+- Make renaming work (unify the names)
+- Join those tables
+- Save all three (separate_1, _2, combined) dataframes in a folder
+
+- Make a list of charts worth plotting
+- Create a .ipynb notebook
+- Plot the charts 
+"""
