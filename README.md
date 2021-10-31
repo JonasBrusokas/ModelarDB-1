@@ -1,4 +1,9 @@
-# ModelarDB
+# ModelarDB-ext
+
+This is a repository for setting up ModelarDB-ext, an extension to ModelarDB containing the LostGorilla compression algorithm, and scripts for conducting compression and forecasting experiments.
+
+## ModelarDB
+
 ModelarDB is a modular model-based time series management system that interfaces
 a query engine and a storage system with ModelarDB Core. This Core is a
 self-contained, adaptive, and highly extensible Java library for automatic online
